@@ -21,7 +21,6 @@ protected:
     unsigned long boostEndTime = 0;
     //Handle throttle
     void setThrottle(int percentage);
-    void decreaseThrottle(int percentage);
     virtual void idleThrottle();
     //Analyse kicks
     int analyseKickPercentage();

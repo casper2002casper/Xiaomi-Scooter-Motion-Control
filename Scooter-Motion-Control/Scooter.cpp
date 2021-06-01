@@ -20,7 +20,7 @@ void Scooter::control()
         currentState = MAX_BRAKING;
     }
     else if(currentBrakingPercentage > 5){
-        decreaseThrottle(currentBrakingPercentage);
+        setThrottle(currentThrottle - (currentBrakingPercentage / 5));//Decrease throttle a little if braking a little
     }
 
     switch (currentState)//Handle Kicks
@@ -58,10 +58,6 @@ void Scooter::setThrottle(int percentage)
     percentage = max(0, min(100, percentage)); //Cap value
     currentThrottle = percentage;
     analogWrite(THROTTLE_PIN, percentage * 233);
-}
-
-void Scooter::decreaseThrottle(int percentage){
-    setThrottle(currentThrottle - percentage);
 }
 
 int Scooter::analyseKickPercentage()//TODO
