@@ -16,37 +16,48 @@ void Scooter::update(uint8_t buff[])
 
 void Scooter::control()
 {
-    if(currentBrakingPercentage > 50){//Handle Brakes
+    if (currentBrakingPercentage > 50)
+    { //Handle Brakes
         currentState = MAX_BRAKING;
     }
-    else if(currentBrakingPercentage > 5){
+    else if (currentBrakingPercentage > 5)
+    {
         setThrottle(currentThrottle - (currentBrakingPercentage / 5));//Decrease throttle a little if braking a little
     }
 
-    switch (currentState)//Handle Kicks
+    switch (currentState) //Handle Kicks
     {
     case DETECTING:
         int kickingPercentage = analyseKickPercentage();
-        if(currentSpeedKmu > 5 && kickingPercentage>20){//Conditions for boost
+        if (currentSpeedKmu > 5 && kickingPercentage > 20)
+        { //Conditions for boost
             setThrottle(kickingPercentage);
+            lastBoostThrottle = currentThrottle;
             boostEndTime = millis() + boostTime;
             currentState = BOOSTING;
         }
-        else{
+        else
+        {
             idleThrottle();
         }
         break;
 
     case BOOSTING:
-        if(millis()> boostEndTime || currentSpeedKmu > 25){
+        if (millis() > boostEndTime || currentSpeedKmu > 25)
+        {
             idleThrottle();
             currentState = DETECTING;
+        }
+        else
+        {
+            setThrottle(lastBoostThrottle - ((boostEndTime - millis())*lastBoostThrottle * 0.5)/boostTime);//Decrease throttle linearly from 100% to 50%
         }
         break;
 
     case MAX_BRAKING:
-        setThrottle(0);//ERS enabled
-        if(currentBrakingPercentage < 30){
+        setThrottle(0); //ERS enabled
+        if (currentBrakingPercentage < 30)
+        {
             currentState = DETECTING;
         }
         break;
@@ -60,7 +71,7 @@ void Scooter::setThrottle(int percentage)
     analogWrite(THROTTLE_PIN, percentage * 233);
 }
 
-int Scooter::analyseKickPercentage()//TODO
+int Scooter::analyseKickPercentage() //TODO
 {
     if (currentSpeedKmu > averageSpeed)
     {

@@ -16,6 +16,7 @@ protected:
     int currentSpeedKmu = 0;
     int currentBrakingPercentage = 0;
     int currentThrottle = 0;
+    int lastBoostThrottle = 0;
 
     int averageSpeed = 0;
     unsigned long boostEndTime = 0;
