@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "XiaomiScooterPro.h"
 
 #define SIZE_VALID_MSG 10
